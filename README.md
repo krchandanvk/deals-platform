@@ -1,36 +1,207 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# DealsHub - All-in-One Deals & Affiliate Platform
 
-## Getting Started
+A modern, full-stack deals and affiliate platform built with Next.js, TypeScript, Tailwind CSS, and Supabase.
 
-First, run the development server:
+## 🚀 Features
+
+- **Product Catalog**: Browse deals across multiple categories
+- **Category Organization**: Electronics, Software, Digital Tools, Fashion, Food, Services
+- **Featured Deals**: Highlight the best offers
+- **Product Details**: Detailed view with images, descriptions, and pricing
+- **Affiliate Links**: Track clicks and redirect to partner websites
+- **Responsive Design**: Mobile-first, works on all devices
+- **Modern UI**: Clean, professional interface with Tailwind CSS
+
+## 🛠️ Tech Stack
+
+- **Frontend**: Next.js 15, React 19, TypeScript
+- **Styling**: Tailwind CSS
+- **Database**: Supabase (PostgreSQL)
+- **Icons**: Lucide React
+- **Hosting**: Vercel (recommended)
+
+## 📋 Prerequisites
+
+- Node.js 18+ installed
+- A Supabase account (free tier works)
+- npm or yarn package manager
+
+## 🚀 Getting Started
+
+### 1. Clone or Setup the Project
+
+The project has been created in the `deals-platform` directory.
+
+### 2. Install Dependencies
+
+```bash
+cd deals-platform
+npm install
+```
+
+### 3. Set Up Supabase
+
+1. Go to [supabase.com](https://supabase.com) and create a new project
+2. Navigate to the SQL Editor in your Supabase dashboard
+3. Run the migration file located at `supabase/migrations/001_initial_schema.sql`
+4. This will create all necessary tables and insert sample data
+5. Get your project URL and anon key from Settings → API
+
+### 4. Configure Environment Variables
+
+Create a `.env.local` file in the root directory:
+
+```bash
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
+
+You can use the `.env.local.example` file as a template.
+
+### 5. Run the Development Server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📁 Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+deals-platform/
+├── src/
+│   ├── app/                 # Next.js app directory
+│   │   ├── about/           # About page
+│   │   ├── best-deals-today/# Best deals page
+│   │   ├── categories/      # Categories listing
+│   │   ├── category/[slug]/ # Category detail page
+│   │   ├── contact/         # Contact page
+│   │   ├── product/[slug]/  # Product detail page
+│   │   ├── layout.tsx       # Root layout
+│   │   ├── page.tsx         # Home page
+│   │   └── globals.css      # Global styles
+│   ├── components/          # React components
+│   │   ├── CategoryCard.tsx
+│   │   ├── Footer.tsx
+│   │   ├── Header.tsx
+│   │   └── ProductCard.tsx
+│   ├── lib/                 # Utilities
+│   │   └── supabase.ts      # Supabase client
+│   └── types/               # TypeScript types
+│       └── index.ts
+├── supabase/
+│   └── migrations/          # Database migrations
+│       └── 001_initial_schema.sql
+└── public/                  # Static assets
+```
 
-## Learn More
+## 🗄️ Database Schema
 
-To learn more about Next.js, take a look at the following resources:
+### Categories
+- `id`: UUID (Primary Key)
+- `name`: Category name
+- `slug`: URL-friendly slug
+- `icon`: Icon identifier
+- `description`: Category description
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Products
+- `id`: UUID (Primary Key)
+- `title`: Product title
+- `slug`: URL-friendly slug
+- `category_id`: Foreign key to categories
+- `description`: Product description
+- `image_url`: Product image URL
+- `original_price`: Original price
+- `discount_price`: Discounted price
+- `link_url`: Affiliate/buy link
+- `link_type`: 'affiliate' or 'buy'
+- `is_featured`: Featured flag
+- `status`: 'active', 'inactive', or 'expired'
+- `expiry_date`: Deal expiration date
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Clicks
+- `id`: UUID (Primary Key)
+- `product_id`: Foreign key to products
+- `clicked_at`: Timestamp
+- `source`: Traffic source
+- `user_agent`: User agent string
+- `ip_address`: Visitor IP address
 
-## Deploy on Vercel
+## 🎨 Features Overview
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### User Features
+- Browse products by category
+- View product details with images and pricing
+- See discount percentages and savings
+- Click to visit affiliate/partner websites
+- Filter and sort deals
+- Responsive mobile-friendly design
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Pages
+- **Home**: Featured deals, categories, and latest offers
+- **Categories**: Browse all categories with deal counts
+- **Category Detail**: View all deals in a specific category
+- **Product Detail**: Full product information and CTA
+- **Best Deals Today**: Deals sorted by discount percentage
+- **About**: Information about the platform
+- **Contact**: Contact form and information
+
+## 🔧 Future Enhancements
+
+- [ ] Admin Dashboard for content management
+- [ ] Click tracking and analytics
+- [ ] Search functionality
+- [ ] Advanced filtering and sorting
+- [ ] Google Sheets integration for bulk uploads
+- [ ] User authentication and favorites
+- [ ] Email notifications for new deals
+- [ ] Social sharing features
+- [ ] SEO optimization (sitemap, meta tags)
+- [ ] Performance optimization
+
+## 📱 Responsive Design
+
+The platform is fully responsive and works on:
+- Desktop (1280px+)
+- Tablet (768px - 1279px)
+- Mobile (320px - 767px)
+
+## 🌐 Deployment
+
+### Deploy to Vercel
+
+1. Push your code to GitHub
+2. Import your project in Vercel
+3. Add environment variables
+4. Deploy!
+
+The platform is optimized for Vercel with automatic builds and deployments.
+
+## 📄 License
+
+This project is open source and available under the MIT License.
+
+## 🤝 Contributing
+
+Contributions are welcome! Feel free to:
+- Report bugs
+- Suggest new features
+- Submit pull requests
+
+## 📧 Support
+
+For questions or support, please contact:
+- Email: contact@dealshub.com
+- GitHub Issues: [Create an issue](https://github.com/yourusername/deals-platform/issues)
+
+## 🙏 Acknowledgments
+
+- Built with [Next.js](https://nextjs.org/)
+- Styled with [Tailwind CSS](https://tailwindcss.com/)
+- Database by [Supabase](https://supabase.com/)
+- Icons by [Lucide](https://lucide.dev/)
+
+---
+
+**Happy Deal Hunting! 🎉**
