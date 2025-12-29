@@ -24,18 +24,27 @@ export default function ProductCard({ product }: ProductCardProps) {
       ? `/go/${product.id}`
       : product.link_url;
 
+  // 🔑 Unsplash detection
+  const isUnsplash = product.image_url?.includes("images.unsplash.com");
+
+  const imageSrc = product.image_url
+    ? product.image_url
+    : "/images/placeholder.png";
+
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
       <Link href={`/product/${product.slug}`}>
         <div className="relative h-48 bg-gray-100">
           <Image
-            src={product.image_url || "/images/placeholder.png"}
+            src={imageSrc}
             alt={product.title}
             fill
             sizes="(max-width: 768px) 100vw, 33vw"
             className="object-cover"
+            unoptimized={isUnsplash} // ✅ stops Unsplash fetch
             onError={(e) => {
-              (e.target as HTMLImageElement).src = "/images/placeholder.png";
+              (e.currentTarget as HTMLImageElement).src =
+                "/images/placeholder.png";
             }}
           />
 
@@ -56,7 +65,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
       <div className="p-4">
         <Link href={`/product/${product.slug}`}>
-          <h3 className="font-semibold text-lg hover:text-blue-600 line-clamp-2">
+          <h3 className="font-semibold text-lg text-gray-900 hover:text-blue-600 line-clamp-2">
             {product.title}
           </h3>
         </Link>
@@ -73,15 +82,15 @@ export default function ProductCard({ product }: ProductCardProps) {
         <div className="mt-2 flex items-center gap-2">
           {product.discount_price ? (
             <>
-              <span className="text-2xl font-bold">
+              <span className="text-2xl font-bold text-gray-900">
                 ₹{product.discount_price}
               </span>
-              <span className="line-through text-gray-400">
+              <span className="text-sm text-gray-500 line-through">
                 ₹{product.original_price}
               </span>
             </>
           ) : (
-            <span className="text-2xl font-bold">
+            <span className="text-2xl font-bold text-gray-900">
               ₹{product.original_price}
             </span>
           )}
