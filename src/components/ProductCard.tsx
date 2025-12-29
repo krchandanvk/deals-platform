@@ -25,41 +25,38 @@ export default function ProductCard({ product }: ProductCardProps) {
       : product.link_url;
 
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+    <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
       <Link href={`/product/${product.slug}`}>
         <div className="relative h-48 bg-gray-100">
-          {product.image_url ? (
-            <Image
-              src={product.image_url}
-              alt={product.title}
-              fill
-              sizes="(max-width: 768px) 100vw, 33vw"
-              className="object-cover"
-            />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center bg-gray-200">
-              <span className="text-gray-400">No image</span>
-            </div>
-          )}
+          <Image
+            src={product.image_url || "/images/placeholder.png"}
+            alt={product.title}
+            fill
+            sizes="(max-width: 768px) 100vw, 33vw"
+            className="object-cover"
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = "/images/placeholder.png";
+            }}
+          />
 
           {product.is_featured && (
-            <div className="absolute top-2 left-2 bg-yellow-400 text-yellow-900 px-2 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
+            <span className="absolute top-2 left-2 bg-yellow-400 text-yellow-900 text-xs px-2 py-1 rounded-full flex items-center gap-1">
               <Star className="w-3 h-3" />
               Featured
-            </div>
+            </span>
           )}
 
           {discountPercentage > 0 && (
-            <div className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-semibold">
+            <span className="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full">
               {discountPercentage}% OFF
-            </div>
+            </span>
           )}
         </div>
       </Link>
 
       <div className="p-4">
         <Link href={`/product/${product.slug}`}>
-          <h3 className="font-semibold text-lg text-gray-900 hover:text-blue-600 transition-colors line-clamp-2">
+          <h3 className="font-semibold text-lg hover:text-blue-600 line-clamp-2">
             {product.title}
           </h3>
         </Link>
@@ -76,21 +73,17 @@ export default function ProductCard({ product }: ProductCardProps) {
         <div className="mt-2 flex items-center gap-2">
           {product.discount_price ? (
             <>
-              <span className="text-2xl font-bold text-gray-900">
-                ${product.discount_price.toFixed(2)}
+              <span className="text-2xl font-bold">
+                ₹{product.discount_price}
               </span>
-              {product.original_price && (
-                <span className="text-sm text-gray-500 line-through">
-                  ${product.original_price.toFixed(2)}
-                </span>
-              )}
+              <span className="line-through text-gray-400">
+                ₹{product.original_price}
+              </span>
             </>
-          ) : product.original_price ? (
-            <span className="text-2xl font-bold text-gray-900">
-              ${product.original_price.toFixed(2)}
-            </span>
           ) : (
-            <span className="text-2xl font-bold text-gray-900">Free</span>
+            <span className="text-2xl font-bold">
+              ₹{product.original_price}
+            </span>
           )}
         </div>
 
@@ -98,10 +91,9 @@ export default function ProductCard({ product }: ProductCardProps) {
           href={dealUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors"
+          className="mt-4 block w-full bg-blue-600 hover:bg-blue-700 text-white text-center py-2 rounded-lg flex items-center justify-center gap-2"
         >
-          {product.link_type === "affiliate" ? "Get Deal" : "Buy Now"}
-          <ExternalLink className="w-4 h-4" />
+          Get Deal <ExternalLink className="w-4 h-4" />
         </a>
       </div>
     </div>
