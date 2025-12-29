@@ -1,17 +1,23 @@
-import { supabase } from '@/lib/supabase';
+import { supabaseServer } from '@/lib/supabase-server';
 import { Product, Category } from '@/types';
 import ProductCard from '@/components/ProductCard';
 import CategoryCard from '@/components/CategoryCard';
 import { Tag, TrendingUp, Clock, Sparkles } from 'lucide-react';
 
+export const revalidate = 3600; // Revalidate every 1 hour
+
 export default async function Home() {
+  const supabase = supabaseServer();
+
   // Fetch featured products
   const { data: featuredProducts } = await supabase
     .from('products')
-    .select(`
+    .select(
+      `
       *,
       category:categories(*)
-    `)
+    `
+    )
     .eq('is_featured', true)
     .eq('status', 'active')
     .order('created_at', { ascending: false })
@@ -26,10 +32,12 @@ export default async function Home() {
   // Fetch latest deals
   const { data: latestDeals } = await supabase
     .from('products')
-    .select(`
+    .select(
+      `
       *,
       category:categories(*)
-    `)
+    `
+    )
     .eq('status', 'active')
     .order('created_at', { ascending: false })
     .limit(8);
@@ -100,7 +108,7 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Categories Section */}
+      {/* Categories */}
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
@@ -111,6 +119,7 @@ export default async function Home() {
               Find deals in your favorite categories
             </p>
           </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {categories?.map((category: Category) => (
               <CategoryCard key={category.id} category={category} />
@@ -119,7 +128,7 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Featured Deals Section */}
+      {/* Featured Deals */}
       <section id="featured" className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
@@ -130,6 +139,7 @@ export default async function Home() {
               Hand-picked deals with the best savings
             </p>
           </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {featuredProducts?.map((product: Product) => (
               <ProductCard key={product.id} product={product} />
@@ -138,7 +148,7 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Latest Deals Section */}
+      {/* Latest Deals */}
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
@@ -149,11 +159,13 @@ export default async function Home() {
               Fresh deals added just for you
             </p>
           </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {latestDeals?.map((product: Product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>
+
           <div className="text-center mt-8">
             <a
               href="/best-deals-today"
@@ -161,28 +173,6 @@ export default async function Home() {
             >
               View All Deals
             </a>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="bg-gradient-to-r from-purple-600 to-blue-600 text-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold mb-4">
-            Never Miss a Deal!
-          </h2>
-          <p className="text-xl mb-8 text-purple-100">
-            Subscribe to our newsletter and get the best deals delivered to your inbox
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
-            <input
-              type="email"
-              placeholder="Enter your email"
-              className="flex-1 px-4 py-3 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-300"
-            />
-            <button className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors">
-              Subscribe
-            </button>
           </div>
         </div>
       </section>

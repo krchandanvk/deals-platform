@@ -1,6 +1,8 @@
-import Link from 'next/link';
-import { ShoppingCart, Search, Menu } from 'lucide-react';
-import { useState } from 'react';
+"use client";
+
+import Link from "next/link";
+import { ShoppingCart, Search, Menu } from "lucide-react";
+import { useState } from "react";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -94,6 +96,7 @@ export default function Header() {
               >
                 Contact
               </Link>
+
               {/* Mobile Search */}
               <div className="relative mt-2">
                 <input
